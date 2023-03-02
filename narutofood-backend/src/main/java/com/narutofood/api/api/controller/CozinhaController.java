@@ -3,11 +3,11 @@ package com.narutofood.api.api.controller;
 import com.narutofood.api.domain.exception.EntidadeEmUsoException;
 import com.narutofood.api.domain.exception.EntidadeNãoEncontradaException;
 import com.narutofood.api.domain.model.Cozinha;
+import com.narutofood.api.domain.model.Restaurante;
 import com.narutofood.api.domain.repository.CozinhaRepository;
 import com.narutofood.api.domain.service.CadastroCozinhaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,20 +41,33 @@ public class CozinhaController {
     }
 
     @PostMapping
-    public void create(@RequestBody Cozinha cozinha) {
-        cadastroCozinhaService.save(cozinha);
+    public ResponseEntity<Cozinha> create(@RequestBody Cozinha cozinha) {
+        try {
+            cadastroCozinhaService.save(cozinha);
+            return ResponseEntity.status(HttpStatus.CREATED).body(cozinha);
+        } catch (EntidadeNãoEncontradaException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cozinha> update(@PathVariable Long id, @RequestBody Cozinha cozinha) {
-        Cozinha obj = cozinhaRepository.getReferenceById(id);
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody  Cozinha cozinha) {
+        try {
+            Cozinha obj = cozinhaRepository.getReferenceById(id);
 
-        if (obj != null) {
-            BeanUtils.copyProperties(cozinha, obj, "id");
-            obj = cozinhaRepository.save(obj);
-            return ResponseEntity.ok(obj);
+            if (obj != null) {
+                BeanUtils.copyProperties(cozinha, obj, "id");
+
+                obj = cadastroCozinhaService.save(obj);
+                return ResponseEntity.ok(obj);
+            }
+
+            return ResponseEntity.notFound().build();
+
+        } catch (EntidadeNãoEncontradaException e) {
+            return ResponseEntity.badRequest()
+                    .body(e.getMessage());
         }
-        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
