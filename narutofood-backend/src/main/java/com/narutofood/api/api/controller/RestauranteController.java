@@ -1,7 +1,9 @@
 package com.narutofood.api.api.controller;
 
 import com.narutofood.api.domain.model.Cozinha;
+import com.narutofood.api.domain.model.Restaurante;
 import com.narutofood.api.domain.repository.CozinhaRepository;
+import com.narutofood.api.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,22 +15,22 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/cozinhas")
-public class CozinhaController {
+@RequestMapping("/restaurantes")
+public class RestauranteController {
 
     @Autowired
-    private CozinhaRepository cozinhaRepository;
+    private RestauranteRepository restauranteRepository;
 
     @GetMapping
-    public ResponseEntity<List<Cozinha>> findAll() {
-        List<Cozinha> cozinhas = cozinhaRepository.findAll();
-        return ResponseEntity.ok(cozinhas);
+    public ResponseEntity<List<Restaurante>> findAll() {
+        List<Restaurante> restaurantes = restauranteRepository.findAll();
+        return ResponseEntity.ok(restaurantes);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Cozinha>> findById(@PathVariable  Long id) {
-        Optional<Cozinha> cozinha = cozinhaRepository.findById(id);
-        return ResponseEntity.ok(cozinha);
+    public ResponseEntity<Optional<Restaurante>> findById(@PathVariable  Long id) {
+        Optional<Restaurante> restaurante = restauranteRepository.findById(id);
+        return ResponseEntity.ok(restaurante);
     }
 
 }
