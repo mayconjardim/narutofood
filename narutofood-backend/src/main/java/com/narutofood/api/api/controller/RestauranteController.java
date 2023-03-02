@@ -30,7 +30,10 @@ public class RestauranteController {
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Restaurante>> findById(@PathVariable  Long id) {
         Optional<Restaurante> restaurante = restauranteRepository.findById(id);
-        return ResponseEntity.ok(restaurante);
+        if(restaurante.isPresent()) {
+            return ResponseEntity.ok(restaurante);
+        }
+        return ResponseEntity.notFound().build();
     }
 
 }
