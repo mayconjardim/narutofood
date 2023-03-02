@@ -6,12 +6,12 @@ import java.util.List;
 
 public interface CozinhaRepository {
 
-    List<Cozinha> list();
+    List<Cozinha> findAll();
 
-    Cozinha buscar(Long id);
+    Cozinha findById(Long id);
 
-    Cozinha salvar(Cozinha cozinha);
+    Cozinha save(Cozinha cozinha);
 
-    void remover(Cozinha cozinha);
+    void remove(Cozinha cozinha);
 
 }
