@@ -3,7 +3,6 @@ package com.narutofood.api.api.controller;
 import com.narutofood.api.domain.exception.EntidadeEmUsoException;
 import com.narutofood.api.domain.exception.EntidadeNãoEncontradaException;
 import com.narutofood.api.domain.model.Cozinha;
-import com.narutofood.api.domain.model.Restaurante;
 import com.narutofood.api.domain.repository.CozinhaRepository;
 import com.narutofood.api.domain.service.CadastroCozinhaService;
 import org.springframework.beans.BeanUtils;
@@ -36,6 +35,15 @@ public class CozinhaController {
         Optional<Cozinha> cozinha = cozinhaRepository.findById(id);
         if(cozinha.isPresent()) {
             return ResponseEntity.ok(cozinha);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/find-name")
+    public ResponseEntity<List<Cozinha>> findByName(String nome) {
+        List<Cozinha> cozinhas = cozinhaRepository.findByNomeContaining(nome);
+        if(cozinhas.size() > 0) {
+            return ResponseEntity.ok(cozinhas);
         }
         return ResponseEntity.notFound().build();
     }
