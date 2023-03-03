@@ -14,4 +14,5 @@ insert into cidade (nome, estado_id) values ('Niteroi', 1);
 insert into cidade (nome, estado_id) values ('Guarulhos', 2);
 insert into cidade (nome, estado_id) values ('Minas Gerais', 3);
 
+insert into forma_pagamento(descricao) values ('Pix');
 
