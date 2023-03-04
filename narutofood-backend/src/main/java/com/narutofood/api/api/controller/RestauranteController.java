@@ -66,7 +66,7 @@ public class RestauranteController {
             Restaurante obj = restauranteRepository.getReferenceById(id);
 
             if (obj != null) {
-                BeanUtils.copyProperties(restaurante, obj, "id");
+                BeanUtils.copyProperties(restaurante, obj, "id", "formasPagamento");
 
                 obj = cadastroRestauranteService.save(obj);
                 return ResponseEntity.ok(obj);

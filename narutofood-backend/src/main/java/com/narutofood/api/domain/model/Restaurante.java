@@ -1,5 +1,6 @@
 package com.narutofood.api.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -24,6 +25,7 @@ public class Restaurante implements Serializable {
     @ManyToOne
     private Cozinha cozinha;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "restaurantes_forma_pagamento",
             joinColumns = @JoinColumn(name = "restaurante_id"),
