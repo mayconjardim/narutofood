@@ -15,4 +15,22 @@ insert into cidade (nome, estado_id) values ('Guarulhos', 2);
 insert into cidade (nome, estado_id) values ('Minas Gerais', 3);
 
 insert into forma_pagamento(descricao) values ('Pix');
+insert into forma_pagamento(descricao) values ('Cartão de Crédito');
+insert into forma_pagamento(descricao) values ('Cartão de Debito');
+insert into forma_pagamento(descricao) values ('Dinheiro');
+
+insert into restaurantes_forma_pagamento(restaurante_id, forma_pagamento_id	) values (1, 1);
+insert into restaurantes_forma_pagamento(restaurante_id, forma_pagamento_id	) values (1, 2);
+insert into restaurantes_forma_pagamento(restaurante_id, forma_pagamento_id	) values (1, 3);
+insert into restaurantes_forma_pagamento(restaurante_id, forma_pagamento_id	) values (1, 4);
+
+insert into restaurantes_forma_pagamento(restaurante_id, forma_pagamento_id	) values (2, 2);
+insert into restaurantes_forma_pagamento(restaurante_id, forma_pagamento_id	) values (2, 3);
+insert into restaurantes_forma_pagamento(restaurante_id, forma_pagamento_id	) values (2, 4);
+
+insert into restaurantes_forma_pagamento(restaurante_id, forma_pagamento_id	) values (3, 4);
+
+
+
+
 
