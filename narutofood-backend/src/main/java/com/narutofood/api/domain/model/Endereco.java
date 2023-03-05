@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
@@ -27,7 +28,7 @@ public class Endereco implements Serializable {
     private String bairro;
 
     @ManyToOne
-    @Column(name = "endereco_cidade_id")
+    @JoinColumn(name = "endereco_cidade_id")
     private Cidade cidade;
 
 
