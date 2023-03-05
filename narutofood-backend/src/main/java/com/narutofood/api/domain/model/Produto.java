@@ -3,10 +3,7 @@ package com.narutofood.api.domain.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -22,5 +19,8 @@ public class Produto implements Serializable {
     private String descricao;
     private BigDecimal preco;
     private Boolean ativo;
+
+    @ManyToOne
+    private Restaurante restaurante;
 
 }
