@@ -1,11 +1,14 @@
 package com.narutofood.api.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Data
@@ -20,7 +23,8 @@ public class Produto implements Serializable {
     private BigDecimal preco;
     private Boolean ativo;
 
-    @ManyToOne
-    private Restaurante restaurante;
+    @JsonIgnore
+    @OneToMany(mappedBy = "restaurante")
+    private List<Produto> produtos = new ArrayList<>();
 
 }

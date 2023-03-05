@@ -36,6 +36,9 @@ public class Restaurante implements Serializable {
     @ManyToOne
     private Cozinha cozinha;
 
+    @OneToMany(mappedBy = "produto")
+    private List<Produto> produtos = new ArrayList<>();
+
     @JsonIgnore
     @Embedded
     private Endereco endereco;
