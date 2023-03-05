@@ -19,12 +19,13 @@ public class Produto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String nome;
     private String descricao;
     private BigDecimal preco;
     private Boolean ativo;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "restaurante")
-    private List<Produto> produtos = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Restaurante restaurante;
 
 }
