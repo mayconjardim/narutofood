@@ -31,12 +31,8 @@ public class CozinhaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Cozinha>> findById(@PathVariable  Long id) {
-        Optional<Cozinha> cozinha = cozinhaRepository.findById(id);
-        if(cozinha.isPresent()) {
-            return ResponseEntity.ok(cozinha);
-        }
-        return ResponseEntity.notFound().build();
+    public Cozinha findById(@PathVariable  Long id) {
+        return cadastroCozinhaService.findOrFail(id);
     }
 
     @GetMapping("/find-name")
@@ -49,45 +45,21 @@ public class CozinhaController {
     }
 
     @PostMapping
-    public ResponseEntity<Cozinha> create(@RequestBody Cozinha cozinha) {
-        try {
-            cadastroCozinhaService.save(cozinha);
-            return ResponseEntity.status(HttpStatus.CREATED).body(cozinha);
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public Cozinha create(@RequestBody Cozinha cozinha) {
+        return cadastroCozinhaService.save(cozinha);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody  Cozinha cozinha) {
-        try {
-            Cozinha obj = cozinhaRepository.getReferenceById(id);
-
-            if (obj != null) {
-                BeanUtils.copyProperties(cozinha, obj, "id");
-
-                obj = cadastroCozinhaService.save(obj);
-                return ResponseEntity.ok(obj);
-            }
-
-            return ResponseEntity.notFound().build();
-
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.badRequest()
-                    .body(e.getMessage());
-        }
+    public Cozinha update(@PathVariable Long id, @RequestBody  Cozinha cozinha) {
+       Cozinha obj = cadastroCozinhaService.findOrFail(id);
+       BeanUtils.copyProperties(cozinha, obj, "id");
+       return cadastroCozinhaService.save(obj);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        try {
-            cadastroCozinhaService.delete(id);
-            return ResponseEntity.noContent().build();
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.notFound().build();
-        } catch (EntidadeEmUsoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
+    public void delete(@PathVariable Long id) {
+        cadastroCozinhaService.delete(id);
     }
 
 }
