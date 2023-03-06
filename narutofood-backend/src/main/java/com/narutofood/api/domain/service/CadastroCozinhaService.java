@@ -1,5 +1,6 @@
 package com.narutofood.api.domain.service;
 
+import com.narutofood.api.domain.exception.CozinhaNaoEncontradaException;
 import com.narutofood.api.domain.exception.EntidadeEmUsoException;
 import com.narutofood.api.domain.exception.EntidadeNaoEncontradaException;
 import com.narutofood.api.domain.model.Cozinha;
@@ -27,7 +28,7 @@ public class CadastroCozinhaService {
             cozinhaRepository.deleteById(id);
         }
         catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(String.format(NÃO_EXISTE_UMA_COZINHA_COM_CÓDIGO_D, id));
+            throw new CozinhaNaoEncontradaException(String.format(NÃO_EXISTE_UMA_COZINHA_COM_CÓDIGO_D, id));
         }
         catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(String.format(COZINHA_DE_CÓDIGO_D_NÃO_PODE_SER_REMOVIDA_POIS_ESTÁ_EM_USO, id));
@@ -35,7 +36,7 @@ public class CadastroCozinhaService {
     }
 
     public Cozinha findOrFail(Long id) {
-        return cozinhaRepository.findById(id).orElseThrow( () -> new EntidadeNaoEncontradaException(String.format(NÃO_EXISTE_UMA_COZINHA_COM_CÓDIGO_D, id)));
+        return cozinhaRepository.findById(id).orElseThrow( () -> new CozinhaNaoEncontradaException(String.format(NÃO_EXISTE_UMA_COZINHA_COM_CÓDIGO_D, id)));
     }
 
 

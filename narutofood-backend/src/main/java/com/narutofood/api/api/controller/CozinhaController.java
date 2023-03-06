@@ -1,7 +1,5 @@
 package com.narutofood.api.api.controller;
 
-import com.narutofood.api.domain.exception.EntidadeEmUsoException;
-import com.narutofood.api.domain.exception.EntidadeNaoEncontradaException;
 import com.narutofood.api.domain.model.Cozinha;
 import com.narutofood.api.domain.repository.CozinhaRepository;
 import com.narutofood.api.domain.service.CadastroCozinhaService;
@@ -12,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/cozinhas")
