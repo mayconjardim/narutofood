@@ -1,7 +1,9 @@
 package com.narutofood.api.domain.service;
 
+import com.narutofood.api.domain.exception.CidadeNaoEncontradaException;
 import com.narutofood.api.domain.exception.EntidadeEmUsoException;
 import com.narutofood.api.domain.exception.EntidadeNaoEncontradaException;
+import com.narutofood.api.domain.exception.RestauranteNaoEncontradoException;
 import com.narutofood.api.domain.model.Cozinha;
 import com.narutofood.api.domain.model.Estado;
 import com.narutofood.api.domain.model.Restaurante;
@@ -35,7 +37,7 @@ public class CadastroRestauranteService {
 
     public Restaurante findOrFail(Long restauranteId) {
         return restauranteRepository.findById(restauranteId)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(
+                .orElseThrow(() -> new RestauranteNaoEncontradoException(
                         String.format(MSG_RESTAURANTE_NAO_ENCONTRADO, restauranteId)));
     }
 

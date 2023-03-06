@@ -1,5 +1,6 @@
 package com.narutofood.api.domain.service;
 
+import com.narutofood.api.domain.exception.CidadeNaoEncontradaException;
 import com.narutofood.api.domain.exception.EntidadeEmUsoException;
 import com.narutofood.api.domain.exception.EntidadeNaoEncontradaException;
 import com.narutofood.api.domain.model.Cidade;
@@ -40,7 +41,7 @@ public class CadastroCidadeService {
             cidadeRepository.deleteById(id);
 
         } catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(
+            throw new CidadeNaoEncontradaException(
                     String.format(MSG_CIDADE_NAO_ENCONTRADA, id));
 
         } catch (DataIntegrityViolationException e) {
@@ -51,7 +52,7 @@ public class CadastroCidadeService {
 
     public Cidade findOrFail(Long cidadeId) {
         return cidadeRepository.findById(cidadeId)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(
+                .orElseThrow(() -> new CidadeNaoEncontradaException(
                         String.format(MSG_CIDADE_NAO_ENCONTRADA, cidadeId)));
     }
 

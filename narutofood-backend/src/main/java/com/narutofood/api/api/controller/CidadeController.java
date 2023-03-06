@@ -1,5 +1,6 @@
 package com.narutofood.api.api.controller;
 
+import com.narutofood.api.domain.exception.CidadeNaoEncontradaException;
 import com.narutofood.api.domain.exception.EntidadeEmUsoException;
 import com.narutofood.api.domain.exception.EntidadeNaoEncontradaException;
 import com.narutofood.api.domain.exception.EstadoNaoEncontradoException;
@@ -75,7 +76,7 @@ public class CidadeController {
         try {
             cadastroCidadeService.delete(id);
             return ResponseEntity.noContent().build();
-        } catch (EntidadeNaoEncontradaException e) {
+        } catch (CidadeNaoEncontradaException e) {
             return ResponseEntity.notFound().build();
         } catch (EntidadeEmUsoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
