@@ -1,8 +1,7 @@
 package com.narutofood.api.api.controller;
 
-import com.narutofood.api.domain.exception.EntidadeEmUsoException;
-import com.narutofood.api.domain.exception.EntidadeNaoEncontradaException;
 import com.narutofood.api.domain.exception.NegocioException;
+import com.narutofood.api.domain.exception.RestauranteNaoEncontradoException;
 import com.narutofood.api.domain.model.Restaurante;
 import com.narutofood.api.domain.repository.RestauranteRepository;
 import com.narutofood.api.domain.service.CadastroRestauranteService;
@@ -51,7 +50,7 @@ public class RestauranteController {
     public Restaurante create(@RequestBody Restaurante restaurante) {
         try {
             return cadastroRestauranteService.save(restaurante);
-        } catch (EntidadeNaoEncontradaException e) {
+        } catch (RestauranteNaoEncontradoException e) {
             throw new NegocioException(e.getMessage());
         }
     }
@@ -66,7 +65,7 @@ public class RestauranteController {
 
         try {
             return cadastroRestauranteService.save(restauranteAtual);
-        } catch (EntidadeNaoEncontradaException e) {
+        } catch (RestauranteNaoEncontradoException e) {
             throw new NegocioException(e.getMessage());
         }
     }
