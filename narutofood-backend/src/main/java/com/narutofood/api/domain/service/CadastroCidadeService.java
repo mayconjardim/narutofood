@@ -22,16 +22,13 @@ public class CadastroCidadeService {
     @Autowired
     private CidadeRepository cidadeRepository;
 
-    public Cidade buscarOuFalhar(Long cidadeId) {
-        return cidadeRepository.findById(cidadeId)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(
-                        String.format(MSG_CIDADE_NAO_ENCONTRADA, cidadeId)));
-    }
+    @Autowired
+    private CadastroEstadoService cadastroEstado;
 
     public Cidade save(Cidade cidade) {
         Long estadoId = cidade.getEstado().getId();
 
-        Estado estado = CadastroEstadoService.buscarOuFalhar(estadoId);
+        Estado estado = cadastroEstado.buscarOuFalhar(estadoId);
 
         cidade.setEstado(estado);
 
@@ -41,13 +38,21 @@ public class CadastroCidadeService {
     public void delete(Long id) {
         try {
             cidadeRepository.deleteById(id);
+
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntidadeNaoEncontradaException(
+                    String.format(MSG_CIDADE_NAO_ENCONTRADA, id));
+
+        } catch (DataIntegrityViolationException e) {
+            throw new EntidadeEmUsoException(
+                    String.format(MSG_CIDADE_EM_USO, id));
         }
-        catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(String.format(MSG_CIDADE_NAO_ENCONTRADA, id));
-        }
-        catch (DataIntegrityViolationException e) {
-            throw new EntidadeEmUsoException(String.format(MSG_CIDADE_EM_USO, id));
-        }
+    }
+
+    public Cidade findOrFail(Long cidadeId) {
+        return cidadeRepository.findById(cidadeId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException(
+                        String.format(MSG_CIDADE_NAO_ENCONTRADA, cidadeId)));
     }
 
 }
