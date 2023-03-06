@@ -1,7 +1,7 @@
 package com.narutofood.api.domain.service;
 
 import com.narutofood.api.domain.exception.EntidadeEmUsoException;
-import com.narutofood.api.domain.exception.EntidadeNaoEncontradaException;
+import com.narutofood.api.domain.exception.EstadoNaoEncontradoException;
 import com.narutofood.api.domain.model.Estado;
 import com.narutofood.api.domain.repository.EstadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +21,9 @@ public class CadastroEstadoService {
     @Autowired
     private EstadoRepository estadoRepository;
 
-    public Estado buscarOuFalhar(Long estadoId) {
+    public Estado findOrFail(Long estadoId) {
         return estadoRepository.findById(estadoId)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(
+                .orElseThrow(() -> new EstadoNaoEncontradoException(
                         String.format(MSG_ESTADO_NAO_ENCONTRADO, estadoId)));
     }
 
@@ -36,7 +36,7 @@ public class CadastroEstadoService {
             estadoRepository.deleteById(id);
 
         } catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(
+            throw new EstadoNaoEncontradoException(
                     String.format(MSG_ESTADO_NAO_ENCONTRADO, id));
 
         } catch (DataIntegrityViolationException e) {
