@@ -15,6 +15,8 @@ public class CadastroCidadeService {
     @Autowired
     private CidadeRepository cidadeRepository;
 
+
+
     public Cidade save(Cidade cidade) {
         return cidadeRepository.save(cidade);
     }
