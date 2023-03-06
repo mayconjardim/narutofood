@@ -3,6 +3,7 @@ package com.narutofood.api.domain.service;
 import com.narutofood.api.domain.exception.EntidadeEmUsoException;
 import com.narutofood.api.domain.exception.EntidadeNaoEncontradaException;
 import com.narutofood.api.domain.model.Cidade;
+import com.narutofood.api.domain.model.Estado;
 import com.narutofood.api.domain.repository.CidadeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -12,12 +13,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class CadastroCidadeService {
 
+    private static final String MSG_CIDADE_EM_USO
+            = "Cidade de código %d não pode ser removida, pois está em uso";
+
+    private static final String MSG_CIDADE_NAO_ENCONTRADA
+            = "Não existe um cadastro de cidade com código %d";
+
     @Autowired
     private CidadeRepository cidadeRepository;
 
-
+    public Cidade buscarOuFalhar(Long cidadeId) {
+        return cidadeRepository.findById(cidadeId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException(
+                        String.format(MSG_CIDADE_NAO_ENCONTRADA, cidadeId)));
+    }
 
     public Cidade save(Cidade cidade) {
+        Long estadoId = cidade.getEstado().getId();
+
+        Estado estado = CadastroEstadoService.buscarOuFalhar(estadoId);
+
+        cidade.setEstado(estado);
+
         return cidadeRepository.save(cidade);
     }
 
@@ -26,10 +43,10 @@ public class CadastroCidadeService {
             cidadeRepository.deleteById(id);
         }
         catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(String.format("Não existe uma cidade com código %d", id));
+            throw new EntidadeNaoEncontradaException(String.format(MSG_CIDADE_NAO_ENCONTRADA, id));
         }
         catch (DataIntegrityViolationException e) {
-            throw new EntidadeEmUsoException(String.format("Cidade de código %d não pode ser removida, pois está em uso", id));
+            throw new EntidadeEmUsoException(String.format(MSG_CIDADE_EM_USO, id));
         }
     }
 
