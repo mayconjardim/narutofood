@@ -11,9 +11,12 @@ import java.time.LocalDateTime;
 @Builder
 public class ExceptionInfo {
 
+
     private Integer status;
+    private LocalDateTime timestamp;
     private String type;
     private String title;
     private String detail;
+    private String userMessage;
 
 }
