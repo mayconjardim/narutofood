@@ -1,7 +1,7 @@
 package com.narutofood.api.domain.service;
 
 import com.narutofood.api.domain.exception.EntidadeEmUsoException;
-import com.narutofood.api.domain.exception.EntidadeNãoEncontradaException;
+import com.narutofood.api.domain.exception.EntidadeNaoEncontradaException;
 import com.narutofood.api.domain.model.Restaurante;
 import com.narutofood.api.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class CadastroRestauranteService {
             restauranteRepository.deleteById(id);
         }
         catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNãoEncontradaException(String.format("Não existe uma restaurante com código %d", id));
+            throw new EntidadeNaoEncontradaException(String.format("Não existe uma restaurante com código %d", id));
         }
         catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(String.format("Restaurante de código %d não pode ser removida, pois está em uso", id));

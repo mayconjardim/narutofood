@@ -2,7 +2,7 @@ package com.narutofood.api.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.narutofood.api.domain.exception.EntidadeEmUsoException;
-import com.narutofood.api.domain.exception.EntidadeNãoEncontradaException;
+import com.narutofood.api.domain.exception.EntidadeNaoEncontradaException;
 import com.narutofood.api.domain.model.Restaurante;
 import com.narutofood.api.domain.repository.RestauranteRepository;
 import com.narutofood.api.domain.service.CadastroRestauranteService;
@@ -55,7 +55,7 @@ public class RestauranteController {
         try {
             cadastroRestauranteService.save(restaurante);
             return ResponseEntity.status(HttpStatus.CREATED).body(restaurante);
-        } catch (EntidadeNãoEncontradaException e) {
+        } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -77,7 +77,7 @@ public class RestauranteController {
 
             return ResponseEntity.notFound().build();
 
-        } catch (EntidadeNãoEncontradaException e) {
+        } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.badRequest()
                     .body(e.getMessage());
         }
@@ -89,7 +89,7 @@ public class RestauranteController {
         try {
             cadastroRestauranteService.delete(id);
             return ResponseEntity.noContent().build();
-        } catch (EntidadeNãoEncontradaException e) {
+        } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.notFound().build();
         } catch (EntidadeEmUsoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();

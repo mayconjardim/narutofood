@@ -1,7 +1,7 @@
 package com.narutofood.api.api.controller;
 
 import com.narutofood.api.domain.exception.EntidadeEmUsoException;
-import com.narutofood.api.domain.exception.EntidadeNãoEncontradaException;
+import com.narutofood.api.domain.exception.EntidadeNaoEncontradaException;
 import com.narutofood.api.domain.model.Cozinha;
 import com.narutofood.api.domain.repository.CozinhaRepository;
 import com.narutofood.api.domain.service.CadastroCozinhaService;
@@ -53,7 +53,7 @@ public class CozinhaController {
         try {
             cadastroCozinhaService.save(cozinha);
             return ResponseEntity.status(HttpStatus.CREATED).body(cozinha);
-        } catch (EntidadeNãoEncontradaException e) {
+        } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -72,7 +72,7 @@ public class CozinhaController {
 
             return ResponseEntity.notFound().build();
 
-        } catch (EntidadeNãoEncontradaException e) {
+        } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.badRequest()
                     .body(e.getMessage());
         }
@@ -83,7 +83,7 @@ public class CozinhaController {
         try {
             cadastroCozinhaService.delete(id);
             return ResponseEntity.noContent().build();
-        } catch (EntidadeNãoEncontradaException e) {
+        } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.notFound().build();
         } catch (EntidadeEmUsoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
