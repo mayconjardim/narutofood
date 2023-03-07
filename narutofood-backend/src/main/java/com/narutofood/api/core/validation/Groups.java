@@ -1,4 +1,4 @@
-package com.narutofood.api;
+package com.narutofood.api.core.validation;
 
 public interface Groups {
 

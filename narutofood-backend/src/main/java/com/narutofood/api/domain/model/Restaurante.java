@@ -1,7 +1,7 @@
 package com.narutofood.api.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.narutofood.api.Groups;
+import com.narutofood.api.core.validation.Groups;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,7 +9,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
@@ -35,7 +34,8 @@ public class Restaurante implements Serializable {
     @Column(nullable = false)
     private String nome;
 
-    @PositiveOrZero
+    @NotNull
+    @PositiveOrZero(message = "{TaxaFrete.invalida}")
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 

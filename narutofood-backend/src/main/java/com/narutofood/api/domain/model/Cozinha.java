@@ -1,7 +1,7 @@
 package com.narutofood.api.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.narutofood.api.Groups;
+import com.narutofood.api.core.validation.Groups;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
