@@ -238,7 +238,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ExceptionInfo.ExceptionInfoBuilder createProblemBuilder(HttpStatus status,
                                                         ProblemType problemType, String detail) {
-
         return ExceptionInfo.builder()
                 .timestamp(LocalDateTime.now())
                 .status(status.value())
