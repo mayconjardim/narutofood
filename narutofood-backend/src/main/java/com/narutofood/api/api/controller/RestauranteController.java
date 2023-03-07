@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -47,7 +48,7 @@ public class RestauranteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Restaurante create(@RequestBody Restaurante restaurante) {
+    public Restaurante create(@RequestBody @Valid Restaurante restaurante) {
         try {
             return cadastroRestauranteService.save(restaurante);
         } catch (RestauranteNaoEncontradoException e) {
