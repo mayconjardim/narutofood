@@ -43,6 +43,7 @@ public class CozinhaController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Cozinha create(@RequestBody @Valid Cozinha cozinha) {
         return cadastroCozinhaService.save(cozinha);
     }
