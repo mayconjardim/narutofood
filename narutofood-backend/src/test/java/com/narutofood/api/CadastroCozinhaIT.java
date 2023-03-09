@@ -6,10 +6,6 @@ import com.narutofood.api.util.DatabaseCleaner;
 import com.narutofood.api.util.ResourceUtils;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-
-import org.aspectj.lang.annotation.Before;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
