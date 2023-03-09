@@ -11,9 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.TestPropertySource;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource("/application-test.properties")
 class CadastroCozinhaIT {
 
    @BeforeEach
@@ -48,7 +50,7 @@ class CadastroCozinhaIT {
                 .get()
                 .then()
                // .body("", Matchers.hasSize(3))
-                .body("nome", Matchers.hasItems("Chinesa"));
+                .body("nome", Matchers.hasItems("Italiana"));
 
     }
 
@@ -63,6 +65,4 @@ class CadastroCozinhaIT {
                 .then()
                 .statusCode(HttpStatus.CREATED.value());
     }
-
-
 }
