@@ -1,23 +1,31 @@
 package com.narutofood.api;
 
-import com.narutofood.api.domain.exception.CozinhaNaoEncontradaException;
-import com.narutofood.api.domain.exception.EntidadeEmUsoException;
-import com.narutofood.api.domain.model.Cozinha;
-import com.narutofood.api.domain.service.CadastroCozinhaService;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import javax.validation.ConstraintViolationException;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CadastroCozinhaIT {
 
+    @LocalServerPort
+    private int port;
+    @Test
+    public void deveRetornarStatus200_QuandoConsultarCozinhas() {
 
+        RestAssured.given()
+                .basePath("/cozinhas")
+                .port(port)
+                .accept(ContentType.JSON)
+                .when()
+                .get()
+                .then()
+                .statusCode(HttpStatus.OK.value());
+
+    }
 
 
 }
