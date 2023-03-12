@@ -3,11 +3,11 @@ package com.narutofood.api.api.controller;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.narutofood.api.api.assembler.RestauranteDtoAssembler;
+import com.narutofood.api.api.assembler.RestauranteDtoInputDisassembler;
 import com.narutofood.api.api.model.dto.RestauranteDTO;
 import com.narutofood.api.api.model.input.RestauranteInput;
 import com.narutofood.api.domain.exception.CozinhaNaoEncontradaException;
 import com.narutofood.api.domain.exception.NegocioException;
-import com.narutofood.api.domain.model.Cozinha;
 import com.narutofood.api.domain.model.Restaurante;
 import com.narutofood.api.domain.repository.RestauranteRepository;
 import com.narutofood.api.domain.service.CadastroRestauranteService;
@@ -39,6 +39,9 @@ public class RestauranteController {
     @Autowired
     private RestauranteDtoAssembler assembler;
 
+    @Autowired
+    private RestauranteDtoInputDisassembler disassembler;
+
     @GetMapping
     public List<RestauranteDTO> findAll() {
         return assembler.toCollectionDTO(restauranteRepository.findAll());
@@ -56,7 +59,7 @@ public class RestauranteController {
     public RestauranteDTO adicionar(@RequestBody @Valid RestauranteInput restauranteInput) {
 
         try {
-            Restaurante restaurante = copyEntityToDTO(restauranteInput);
+            Restaurante restaurante = disassembler.copyEntityToDTO(restauranteInput);
             return assembler.copyDtoToEntity(cadastroRestaurante.save(restaurante));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
@@ -67,7 +70,7 @@ public class RestauranteController {
     public RestauranteDTO update(@PathVariable Long restauranteId,
                                  @RequestBody @Valid RestauranteInput restauranteInput ) {
         try {
-            Restaurante restaurante = copyEntityToDTO(restauranteInput);
+            Restaurante restaurante = disassembler.copyEntityToDTO(restauranteInput);
             Restaurante restauranteAtual = cadastroRestaurante.findOrFail(restauranteId);
 
             BeanUtils.copyProperties(restaurante, restauranteAtual,
@@ -106,18 +109,6 @@ public class RestauranteController {
     }
 
 
-    private Restaurante copyEntityToDTO(RestauranteInput restauranteInput) {
-        Restaurante restaurante = new Restaurante();
-        restaurante.setNome(restauranteInput.getNome());
-        restaurante.setTaxaFrete(restauranteInput.getTaxaFrete());
 
-        Cozinha cozinha = new Cozinha();
-        cozinha.setId(restauranteInput.getCozinha().getId());
-
-        restaurante.setCozinha(cozinha);
-
-        return restaurante;
-
-    }
 
 }
