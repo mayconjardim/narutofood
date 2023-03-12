@@ -7,7 +7,7 @@ import com.narutofood.api.domain.model.Endereco;
 import com.narutofood.api.domain.model.FormaPagamento;
 import com.narutofood.api.domain.model.Produto;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public abstract class RestauranteMixin {
@@ -18,11 +18,11 @@ public abstract class RestauranteMixin {
     @JsonIgnore
     private Endereco endereco;
 
-    @JsonIgnore
-    private LocalDateTime dataCadastro;
+    //@JsonIgnore
+    private OffsetDateTime dataCadastro;
 
-    @JsonIgnore
-    private LocalDateTime dataAtualizacao;
+    //@JsonIgnore
+    private OffsetDateTime dataAtualizacao;
 
     @JsonIgnore
     private List<FormaPagamento> formasPagamento;
