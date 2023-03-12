@@ -70,11 +70,10 @@ public class RestauranteController {
     public RestauranteDTO update(@PathVariable Long restauranteId,
                                  @RequestBody @Valid RestauranteInput restauranteInput ) {
         try {
-            Restaurante restaurante = disassembler.copyEntityToDTO(restauranteInput);
+           // Restaurante restaurante = disassembler.copyEntityToDTO(restauranteInput);
             Restaurante restauranteAtual = cadastroRestaurante.findOrFail(restauranteId);
 
-            BeanUtils.copyProperties(restaurante, restauranteAtual,
-                    "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
+            disassembler.copyToDomainObject(restauranteInput, restauranteAtual);
 
             return assembler.copyDtoToEntity(cadastroRestaurante.save(restauranteAtual));
         } catch (CozinhaNaoEncontradaException e) {

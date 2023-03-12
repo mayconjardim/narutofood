@@ -30,6 +30,7 @@ public class CadastroCozinhaService {
     public void delete(Long id) {
         try {
             cozinhaRepository.deleteById(id);
+            cozinhaRepository.flush();
         }
         catch (EmptyResultDataAccessException e) {
             throw new CozinhaNaoEncontradaException(String.format(NÃO_EXISTE_UMA_COZINHA_COM_CÓDIGO_D, id));
