@@ -2,6 +2,8 @@ package com.narutofood.api.api.controller;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.narutofood.api.api.model.dto.CozinhaDTO;
+import com.narutofood.api.api.model.dto.RestauranteDTO;
 import com.narutofood.api.domain.exception.CozinhaNaoEncontradaException;
 import com.narutofood.api.domain.exception.NegocioException;
 import com.narutofood.api.domain.model.Restaurante;
@@ -21,6 +23,7 @@ import javax.validation.Valid;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -33,28 +36,30 @@ public class RestauranteController {
     private CadastroRestauranteService cadastroRestaurante;
 
     @GetMapping
-    public List<Restaurante> findAll() {
-        return restauranteRepository.findAll();
+    public List<RestauranteDTO> findAll() {
+        return toCollectionDTO(restauranteRepository.findAll());
     }
 
     @GetMapping("/{restauranteId}")
-    public Restaurante findById(@PathVariable Long restauranteId) {
-        return cadastroRestaurante.findOrFail(restauranteId);
+    public RestauranteDTO findById(@PathVariable Long restauranteId) {
+        Restaurante restaurante = cadastroRestaurante.findOrFail(restauranteId);
+        return copyDtoToEntity(restaurante);
+
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Restaurante adicionar(@RequestBody @Valid Restaurante restaurante) {
+    public RestauranteDTO adicionar(@RequestBody @Valid Restaurante restaurante) {
 
         try {
-            return cadastroRestaurante.save(restaurante);
+            return copyDtoToEntity(cadastroRestaurante.save(restaurante));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
         }
     }
 
     @PutMapping("/{restauranteId}")
-    public Restaurante update(@PathVariable Long restauranteId,
+    public RestauranteDTO update(@PathVariable Long restauranteId,
                                  @RequestBody @Valid Restaurante restaurante) {
         try {
             Restaurante restauranteAtual = cadastroRestaurante.findOrFail(restauranteId);
@@ -62,14 +67,14 @@ public class RestauranteController {
             BeanUtils.copyProperties(restaurante, restauranteAtual,
                     "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
 
-            return cadastroRestaurante.save(restauranteAtual);
+            return copyDtoToEntity(cadastroRestaurante.save(restauranteAtual));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
         }
     }
 
     @PatchMapping("/{restauranteId}")
-    public Restaurante updateParcial(@PathVariable Long restauranteId,
+    public RestauranteDTO updateParcial(@PathVariable Long restauranteId,
                                      @RequestBody Map<String, Object> campos, HttpServletRequest request) {
         Restaurante restauranteAtual = cadastroRestaurante.findOrFail(restauranteId);
 
@@ -101,6 +106,25 @@ public class RestauranteController {
             Throwable rootCause = ExceptionUtils.getRootCause(e);
             throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serverHttpRequest);
         }
+    }
+
+
+    private RestauranteDTO copyDtoToEntity(Restaurante restaurante) {
+        CozinhaDTO cozinhaDTO = new CozinhaDTO();
+
+        cozinhaDTO.setId(restaurante.getCozinha().getId());
+        cozinhaDTO.setNome(restaurante.getCozinha().getNome());
+
+        RestauranteDTO restauranteDTO = new RestauranteDTO();
+        restauranteDTO.setId(restaurante.getId());
+        restauranteDTO.setNome(restaurante.getNome());
+        restauranteDTO.setTaxaFrete(restaurante.getTaxaFrete());
+        restauranteDTO.setCozinha(cozinhaDTO);
+        return restauranteDTO;
+    }
+
+    private List<RestauranteDTO> toCollectionDTO(List<Restaurante> restaurantes) {
+        return restaurantes.stream().map(restaurante -> copyDtoToEntity(restaurante)).collect(Collectors.toList());
     }
 
 }
