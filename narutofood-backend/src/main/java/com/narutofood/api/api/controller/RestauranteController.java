@@ -2,10 +2,12 @@ package com.narutofood.api.api.controller;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.narutofood.api.api.model.dto.CozinhaDTO;
+import com.narutofood.api.api.assembler.RestauranteDtoAssembler;
 import com.narutofood.api.api.model.dto.RestauranteDTO;
+import com.narutofood.api.api.model.input.RestauranteInput;
 import com.narutofood.api.domain.exception.CozinhaNaoEncontradaException;
 import com.narutofood.api.domain.exception.NegocioException;
+import com.narutofood.api.domain.model.Cozinha;
 import com.narutofood.api.domain.model.Restaurante;
 import com.narutofood.api.domain.repository.RestauranteRepository;
 import com.narutofood.api.domain.service.CadastroRestauranteService;
@@ -23,7 +25,6 @@ import javax.validation.Valid;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -35,24 +36,28 @@ public class RestauranteController {
     @Autowired
     private CadastroRestauranteService cadastroRestaurante;
 
+    @Autowired
+    private RestauranteDtoAssembler assembler;
+
     @GetMapping
     public List<RestauranteDTO> findAll() {
-        return toCollectionDTO(restauranteRepository.findAll());
+        return assembler.toCollectionDTO(restauranteRepository.findAll());
     }
 
     @GetMapping("/{restauranteId}")
     public RestauranteDTO findById(@PathVariable Long restauranteId) {
         Restaurante restaurante = cadastroRestaurante.findOrFail(restauranteId);
-        return copyDtoToEntity(restaurante);
+        return assembler.copyDtoToEntity(restaurante);
 
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RestauranteDTO adicionar(@RequestBody @Valid Restaurante restaurante) {
+    public RestauranteDTO adicionar(@RequestBody @Valid RestauranteInput restauranteInput) {
 
         try {
-            return copyDtoToEntity(cadastroRestaurante.save(restaurante));
+            Restaurante restaurante = copyEntityToDTO(restauranteInput);
+            return assembler.copyDtoToEntity(cadastroRestaurante.save(restaurante));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
         }
@@ -60,28 +65,20 @@ public class RestauranteController {
 
     @PutMapping("/{restauranteId}")
     public RestauranteDTO update(@PathVariable Long restauranteId,
-                                 @RequestBody @Valid Restaurante restaurante) {
+                                 @RequestBody @Valid RestauranteInput restauranteInput ) {
         try {
+            Restaurante restaurante = copyEntityToDTO(restauranteInput);
             Restaurante restauranteAtual = cadastroRestaurante.findOrFail(restauranteId);
 
             BeanUtils.copyProperties(restaurante, restauranteAtual,
                     "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
 
-            return copyDtoToEntity(cadastroRestaurante.save(restauranteAtual));
+            return assembler.copyDtoToEntity(cadastroRestaurante.save(restauranteAtual));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
         }
     }
 
-    @PatchMapping("/{restauranteId}")
-    public RestauranteDTO updateParcial(@PathVariable Long restauranteId,
-                                     @RequestBody Map<String, Object> campos, HttpServletRequest request) {
-        Restaurante restauranteAtual = cadastroRestaurante.findOrFail(restauranteId);
-
-        merge(campos, restauranteAtual, request);
-
-        return update(restauranteId, restauranteAtual);
-    }
 
     private void merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino,
                        HttpServletRequest request) {
@@ -109,22 +106,18 @@ public class RestauranteController {
     }
 
 
-    private RestauranteDTO copyDtoToEntity(Restaurante restaurante) {
-        CozinhaDTO cozinhaDTO = new CozinhaDTO();
+    private Restaurante copyEntityToDTO(RestauranteInput restauranteInput) {
+        Restaurante restaurante = new Restaurante();
+        restaurante.setNome(restauranteInput.getNome());
+        restaurante.setTaxaFrete(restauranteInput.getTaxaFrete());
 
-        cozinhaDTO.setId(restaurante.getCozinha().getId());
-        cozinhaDTO.setNome(restaurante.getCozinha().getNome());
+        Cozinha cozinha = new Cozinha();
+        cozinha.setId(restauranteInput.getCozinha().getId());
 
-        RestauranteDTO restauranteDTO = new RestauranteDTO();
-        restauranteDTO.setId(restaurante.getId());
-        restauranteDTO.setNome(restaurante.getNome());
-        restauranteDTO.setTaxaFrete(restaurante.getTaxaFrete());
-        restauranteDTO.setCozinha(cozinhaDTO);
-        return restauranteDTO;
-    }
+        restaurante.setCozinha(cozinha);
 
-    private List<RestauranteDTO> toCollectionDTO(List<Restaurante> restaurantes) {
-        return restaurantes.stream().map(restaurante -> copyDtoToEntity(restaurante)).collect(Collectors.toList());
+        return restaurante;
+
     }
 
 }
