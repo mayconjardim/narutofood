@@ -1,16 +1,10 @@
 package com.narutofood.api.domain.service;
 
-import com.narutofood.api.domain.exception.CidadeNaoEncontradaException;
-import com.narutofood.api.domain.exception.EntidadeEmUsoException;
-import com.narutofood.api.domain.exception.EntidadeNaoEncontradaException;
 import com.narutofood.api.domain.exception.RestauranteNaoEncontradoException;
 import com.narutofood.api.domain.model.Cozinha;
-import com.narutofood.api.domain.model.Estado;
 import com.narutofood.api.domain.model.Restaurante;
 import com.narutofood.api.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
