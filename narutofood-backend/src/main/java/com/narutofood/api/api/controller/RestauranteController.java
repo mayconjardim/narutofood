@@ -107,6 +107,17 @@ public class RestauranteController {
         }
     }
 
+    @PutMapping("/{id}/ativo")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void active(@PathVariable long id) {
+        cadastroRestaurante.activate(id);
+    }
+
+    @DeleteMapping("/{id}/ativo")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deactive(@PathVariable long id) {
+        cadastroRestaurante.deactive(id);
+    }
 
 
 
