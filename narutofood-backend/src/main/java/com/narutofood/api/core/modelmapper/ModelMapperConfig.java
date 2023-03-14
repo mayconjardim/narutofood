@@ -1,5 +1,7 @@
 package com.narutofood.api.core.modelmapper;
 
+import com.narutofood.api.api.model.dto.EnderecoDTO;
+import com.narutofood.api.domain.model.Endereco;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +11,14 @@ public class ModelMapperConfig {
 
     @Bean
     public ModelMapper modelMapper() {
-        return new ModelMapper();
+        var modelMapper = new ModelMapper();
+
+        var enderecoToEnderecoDtoMap = modelMapper.createTypeMap(Endereco.class, EnderecoDTO.class);
+
+        enderecoToEnderecoDtoMap.<String>addMapping(src -> src.getCidade().getEstado().getNome(), ((destination, value) ->
+                destination.getCidade().setEstado(value)));
+
+        return modelMapper;
     }
 
 }
