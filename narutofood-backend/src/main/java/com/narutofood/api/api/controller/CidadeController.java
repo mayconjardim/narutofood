@@ -1,9 +1,10 @@
 package com.narutofood.api.api.controller;
 
-import com.narutofood.api.domain.exception.CidadeNaoEncontradaException;
-import com.narutofood.api.domain.exception.EntidadeEmUsoException;
-import com.narutofood.api.domain.exception.EntidadeNaoEncontradaException;
-import com.narutofood.api.domain.exception.EstadoNaoEncontradoException;
+import com.narutofood.api.api.assembler.CidadeDtoAssembler;
+import com.narutofood.api.api.assembler.CidadeDtoInputDisassembler;
+import com.narutofood.api.api.model.dto.CidadeDTO;
+import com.narutofood.api.api.model.dto.CidadeDtoInput;
+import com.narutofood.api.domain.exception.*;
 import com.narutofood.api.domain.model.Cidade;
 import com.narutofood.api.domain.repository.CidadeRepository;
 import com.narutofood.api.domain.service.CadastroCidadeService;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,50 +26,55 @@ public class CidadeController {
     private CidadeRepository cidadeRepository;
 
     @Autowired
+    private CidadeDtoAssembler assembler;
+
+    @Autowired
+    private CidadeDtoInputDisassembler disassembler;
+
+    @Autowired
     private CadastroCidadeService cadastroCidadeService;
 
     @GetMapping
-    public ResponseEntity<List<Cidade>> findAll() {
+    public List<CidadeDTO> findAll() {
         List<Cidade> cidades = cidadeRepository.findAll();
-        return ResponseEntity.ok(cidades);
+
+        return assembler.toCollectionModel(cidades);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Cidade>> findById(@PathVariable  Long id) {
-        Optional<Cidade> cidade = cidadeRepository.findById(id);
-        if(cidade.isPresent()) {
-            return ResponseEntity.ok(cidade);
-        }
-        return ResponseEntity.notFound().build();
+    public CidadeDTO findById(@PathVariable Long id) {
+        Cidade cidade = cadastroCidadeService.findOrFail(id);
+
+        return assembler.toModel(cidade);
     }
 
     @PostMapping
-    public ResponseEntity<Cidade> create(@RequestBody Cidade cidade) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public CidadeDTO create(@RequestBody @Valid CidadeDtoInput cidadeInput) {
         try {
-            cadastroCidadeService.save(cidade);
-            return ResponseEntity.status(HttpStatus.CREATED).body(cidade);
+            Cidade cidade = disassembler.toDomainObject(cidadeInput);
+
+            cidade = cadastroCidadeService.save(cidade);
+
+            return assembler.toModel(cidade);
         } catch (EstadoNaoEncontradoException e) {
-            return ResponseEntity.badRequest().build();
+            throw new NegocioException(e.getMessage(), e);
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody  Cidade cidade) {
+    public CidadeDTO update(@PathVariable Long id,
+                                 @RequestBody @Valid CidadeDtoInput cidadeInput) {
         try {
-            Cidade obj = cidadeRepository.getReferenceById(id);
+            Cidade cidadeAtual = cadastroCidadeService.findOrFail(id);
 
-            if (obj != null) {
-                BeanUtils.copyProperties(cidade, obj, "id");
+            disassembler.copyToDomainObject(cidadeInput, cidadeAtual);
 
-                obj = cadastroCidadeService.save(obj);
-                return ResponseEntity.ok(obj);
-            }
+            cidadeAtual = cadastroCidadeService.save(cidadeAtual);
 
-            return ResponseEntity.notFound().build();
-
+            return assembler.toModel(cidadeAtual);
         } catch (EstadoNaoEncontradoException e) {
-            return ResponseEntity.badRequest()
-                    .body(e.getMessage());
+            throw new NegocioException(e.getMessage(), e);
         }
     }
 
