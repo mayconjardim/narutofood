@@ -1,4 +1,4 @@
-package com.narutofood.api.api.assembler;
+package com.narutofood.api.api.model.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Setter
 @Getter
-public class EstadoDtoInputAssembler {
+public class EstadoDtoInput {
 
     @NotBlank
     private String nome;
