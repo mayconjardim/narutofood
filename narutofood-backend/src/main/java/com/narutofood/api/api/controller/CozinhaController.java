@@ -1,5 +1,9 @@
 package com.narutofood.api.api.controller;
 
+import com.narutofood.api.api.assembler.CozinhaDtoAssembler;
+import com.narutofood.api.api.assembler.CozinhaDtoInputDisassembler;
+import com.narutofood.api.api.model.dto.CozinhaDTO;
+import com.narutofood.api.api.model.dto.CozinhaDtoInput;
 import com.narutofood.api.domain.model.Cozinha;
 import com.narutofood.api.domain.repository.CozinhaRepository;
 import com.narutofood.api.domain.service.CadastroCozinhaService;
@@ -20,17 +24,26 @@ public class CozinhaController {
     private CozinhaRepository cozinhaRepository;
 
     @Autowired
+    private CozinhaDtoAssembler assembler;
+
+    @Autowired
+    private CozinhaDtoInputDisassembler disassembler;
+
+    @Autowired
     private CadastroCozinhaService cadastroCozinhaService;
 
     @GetMapping
-    public ResponseEntity<List<Cozinha>> findAll() {
-        List<Cozinha> cozinhas = cozinhaRepository.findAll();
-        return ResponseEntity.ok(cozinhas);
+    public List<CozinhaDTO> findAll() {
+        List<Cozinha> todasCozinhas = cozinhaRepository.findAll();
+
+        return assembler.toCollectionModel(todasCozinhas);
     }
 
     @GetMapping("/{id}")
-    public Cozinha findById(@PathVariable  Long id) {
-        return cadastroCozinhaService.findOrFail(id);
+    public CozinhaDTO findById(@PathVariable Long id) {
+        Cozinha cozinha = cadastroCozinhaService.findOrFail(id);
+
+        return assembler.toModel(cozinha);
     }
 
     @GetMapping("/find-name")
@@ -44,15 +57,21 @@ public class CozinhaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cozinha create(@RequestBody @Valid Cozinha cozinha) {
-        return cadastroCozinhaService.save(cozinha);
+    public CozinhaDTO create(@RequestBody @Valid CozinhaDtoInput cozinhaInput) {
+        Cozinha cozinha = disassembler.toDomainObject(cozinhaInput);
+        cozinha = cadastroCozinhaService.save(cozinha);
+
+        return assembler.toModel(cozinha);
     }
 
     @PutMapping("/{id}")
-    public Cozinha update(@PathVariable Long id, @Valid @RequestBody  Cozinha cozinha) {
-       Cozinha obj = cadastroCozinhaService.findOrFail(id);
-       BeanUtils.copyProperties(cozinha, obj, "id");
-       return cadastroCozinhaService.save(obj);
+    public CozinhaDTO atualizar(@PathVariable Long id,
+                                  @RequestBody @Valid CozinhaDtoInput cozinhaInput) {
+        Cozinha cozinhaAtual = cadastroCozinhaService.findOrFail(id);
+        disassembler.copyToDomainObject(cozinhaInput, cozinhaAtual);
+        cozinhaAtual = cadastroCozinhaService.save(cozinhaAtual);
+
+        return assembler.toModel(cozinhaAtual);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
