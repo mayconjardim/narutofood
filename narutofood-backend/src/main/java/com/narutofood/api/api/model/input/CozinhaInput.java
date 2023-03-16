@@ -1,4 +1,4 @@
-package com.narutofood.api.api.model.dto;
+package com.narutofood.api.api.model.input;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Setter
 @Getter
-public class CozinhaDtoInput {
+public class CozinhaInput {
 
     @NotBlank
     private String nome;

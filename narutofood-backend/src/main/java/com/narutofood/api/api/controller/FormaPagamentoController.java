@@ -3,7 +3,7 @@ package com.narutofood.api.api.controller;
 import com.narutofood.api.api.assembler.FormaPagamentoDtoAssembler;
 import com.narutofood.api.api.assembler.FormaPagamentoDtoInputDisassembler;
 import com.narutofood.api.api.model.dto.FormaPagamentoDTO;
-import com.narutofood.api.api.model.dto.FormaPagamentoDtoInput;
+import com.narutofood.api.api.model.input.FormaPagamentoInput;
 import com.narutofood.api.domain.model.FormaPagamento;
 import com.narutofood.api.domain.repository.FormaPagamentoRepository;
 import com.narutofood.api.domain.service.CadastroFormaPagamentoService;
@@ -46,7 +46,7 @@ public class FormaPagamentoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public FormaPagamentoDTO adicionar(@RequestBody @Valid FormaPagamentoDtoInput formaPagamentoInput) {
+    public FormaPagamentoDTO adicionar(@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
         FormaPagamento formaPagamento = disassembler.toDomainObject(formaPagamentoInput);
 
         formaPagamento = cadastroFormaPagamento.save(formaPagamento);
@@ -56,7 +56,7 @@ public class FormaPagamentoController {
 
     @PutMapping("/{id}")
     public FormaPagamentoDTO update(@PathVariable Long id,
-                                         @RequestBody @Valid FormaPagamentoDtoInput formaPagamentoInput) {
+                                         @RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
         FormaPagamento formaPagamentoAtual = cadastroFormaPagamento.findOrFail(id);
 
         disassembler.copyToDomainObject(formaPagamentoInput, formaPagamentoAtual);

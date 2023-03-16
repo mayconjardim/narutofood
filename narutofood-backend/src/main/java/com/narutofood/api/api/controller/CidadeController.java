@@ -3,12 +3,11 @@ package com.narutofood.api.api.controller;
 import com.narutofood.api.api.assembler.CidadeDtoAssembler;
 import com.narutofood.api.api.assembler.CidadeDtoInputDisassembler;
 import com.narutofood.api.api.model.dto.CidadeDTO;
-import com.narutofood.api.api.model.dto.CidadeDtoInput;
+import com.narutofood.api.api.model.input.CidadeInput;
 import com.narutofood.api.domain.exception.*;
 import com.narutofood.api.domain.model.Cidade;
 import com.narutofood.api.domain.repository.CidadeRepository;
 import com.narutofood.api.domain.service.CadastroCidadeService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/cidades")
@@ -50,7 +48,7 @@ public class CidadeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CidadeDTO create(@RequestBody @Valid CidadeDtoInput cidadeInput) {
+    public CidadeDTO create(@RequestBody @Valid CidadeInput cidadeInput) {
         try {
             Cidade cidade = disassembler.toDomainObject(cidadeInput);
 
@@ -64,7 +62,7 @@ public class CidadeController {
 
     @PutMapping("/{id}")
     public CidadeDTO update(@PathVariable Long id,
-                                 @RequestBody @Valid CidadeDtoInput cidadeInput) {
+                                 @RequestBody @Valid CidadeInput cidadeInput) {
         try {
             Cidade cidadeAtual = cadastroCidadeService.findOrFail(id);
 

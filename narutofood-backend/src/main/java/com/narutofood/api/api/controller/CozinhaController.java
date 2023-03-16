@@ -3,11 +3,10 @@ package com.narutofood.api.api.controller;
 import com.narutofood.api.api.assembler.CozinhaDtoAssembler;
 import com.narutofood.api.api.assembler.CozinhaDtoInputDisassembler;
 import com.narutofood.api.api.model.dto.CozinhaDTO;
-import com.narutofood.api.api.model.dto.CozinhaDtoInput;
+import com.narutofood.api.api.model.input.CozinhaInput;
 import com.narutofood.api.domain.model.Cozinha;
 import com.narutofood.api.domain.repository.CozinhaRepository;
 import com.narutofood.api.domain.service.CadastroCozinhaService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,7 +56,7 @@ public class CozinhaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CozinhaDTO create(@RequestBody @Valid CozinhaDtoInput cozinhaInput) {
+    public CozinhaDTO create(@RequestBody @Valid CozinhaInput cozinhaInput) {
         Cozinha cozinha = disassembler.toDomainObject(cozinhaInput);
         cozinha = cadastroCozinhaService.save(cozinha);
 
@@ -66,7 +65,7 @@ public class CozinhaController {
 
     @PutMapping("/{id}")
     public CozinhaDTO atualizar(@PathVariable Long id,
-                                  @RequestBody @Valid CozinhaDtoInput cozinhaInput) {
+                                  @RequestBody @Valid CozinhaInput cozinhaInput) {
         Cozinha cozinhaAtual = cadastroCozinhaService.findOrFail(id);
         disassembler.copyToDomainObject(cozinhaInput, cozinhaAtual);
         cozinhaAtual = cadastroCozinhaService.save(cozinhaAtual);

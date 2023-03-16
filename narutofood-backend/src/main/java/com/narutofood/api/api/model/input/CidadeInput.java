@@ -1,6 +1,6 @@
-package com.narutofood.api.api.model.dto;
+package com.narutofood.api.api.model.input;
 
-import com.narutofood.api.api.model.dto.EstadoDtoInput;
+import com.narutofood.api.api.model.input.EstadoInput;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,13 +10,13 @@ import javax.validation.constraints.NotNull;
 
 @Setter
 @Getter
-public class CidadeDtoInput {
+public class CidadeInput {
 
     @NotBlank
     private String nome;
 
     @Valid
     @NotNull
-    private EstadoDtoInput estado;
+    private EstadoInput estado;
 
 }

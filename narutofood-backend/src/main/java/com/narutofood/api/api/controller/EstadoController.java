@@ -3,13 +3,12 @@ package com.narutofood.api.api.controller;
 import com.narutofood.api.api.assembler.EstadoDtoAssembler;
 import com.narutofood.api.api.assembler.EstadoDtoInputDisassembler;
 import com.narutofood.api.api.model.dto.EstadoDTO;
-import com.narutofood.api.api.model.dto.EstadoDtoInput;
+import com.narutofood.api.api.model.input.EstadoInput;
 import com.narutofood.api.domain.exception.EntidadeEmUsoException;
 import com.narutofood.api.domain.exception.EntidadeNaoEncontradaException;
 import com.narutofood.api.domain.model.Estado;
 import com.narutofood.api.domain.repository.EstadoRepository;
 import com.narutofood.api.domain.service.CadastroEstadoService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/estados")
@@ -49,7 +47,7 @@ public class EstadoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EstadoDTO create(@RequestBody @Valid EstadoDtoInput estadoInput) {
+    public EstadoDTO create(@RequestBody @Valid EstadoInput estadoInput) {
       Estado estado = disassembler.toDomainObject(estadoInput);
 
       estado = cadastroEstadoService.save(estado);
@@ -59,7 +57,7 @@ public class EstadoController {
 
     @PutMapping("/{id}")
     public EstadoDTO atualizar(@PathVariable Long id,
-                                 @RequestBody @Valid EstadoDtoInput estadoInput) {
+                                 @RequestBody @Valid EstadoInput estadoInput) {
         Estado estadoAtual = cadastroEstadoService.findOrFail(id);
 
         disassembler.copyToDomainObject(estadoInput, estadoAtual);

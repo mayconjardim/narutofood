@@ -1,4 +1,4 @@
-package com.narutofood.api.api.model.dto;
+package com.narutofood.api.api.model.input;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 @Setter
 @Getter
-public class EstadoDtoIdInput {
+public class EstadoIdInput {
 
     @NotNull
     private Long id;

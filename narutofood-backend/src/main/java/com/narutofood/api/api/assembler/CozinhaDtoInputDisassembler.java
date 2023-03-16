@@ -1,6 +1,6 @@
 package com.narutofood.api.api.assembler;
 
-import com.narutofood.api.api.model.dto.CozinhaDtoInput;
+import com.narutofood.api.api.model.input.CozinhaInput;
 import com.narutofood.api.domain.model.Cozinha;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +12,11 @@ public class CozinhaDtoInputDisassembler {
     @Autowired
     private ModelMapper modelMapper;
 
-    public Cozinha toDomainObject(CozinhaDtoInput cozinhaInput) {
+    public Cozinha toDomainObject(CozinhaInput cozinhaInput) {
         return modelMapper.map(cozinhaInput, Cozinha.class);
     }
 
-    public void copyToDomainObject(CozinhaDtoInput cozinhaInput, Cozinha cozinha) {
+    public void copyToDomainObject(CozinhaInput cozinhaInput, Cozinha cozinha) {
         modelMapper.map(cozinhaInput, cozinha);
     }
 
