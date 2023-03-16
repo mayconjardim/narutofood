@@ -62,6 +62,7 @@ public class Restaurante implements Serializable {
     @Column(nullable = false, columnDefinition = "datetime")
     private OffsetDateTime dataAtualizacao;
 
+    private Boolean aberto = Boolean.FALSE;
 
     @ManyToMany
     @JoinTable(name = "restaurante_forma_pagamento",
@@ -72,6 +73,14 @@ public class Restaurante implements Serializable {
 
     @OneToMany(mappedBy = "restaurante")
     private List<Produto> produtos = new ArrayList<>();
+
+    public void open() {
+        setAberto(true);
+    }
+
+    public void closed() {
+        setAberto(false);
+    }
 
     public void active() {
         setAtivo(true);
@@ -84,5 +93,7 @@ public class Restaurante implements Serializable {
     public boolean removeFormaPagamento(FormaPagamento formaPagamento) {
         return getFormasPagamento().remove(formaPagamento);
     }
+
+
 
 }
