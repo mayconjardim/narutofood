@@ -65,6 +65,12 @@ public class Restaurante implements Serializable {
     private Boolean aberto = Boolean.FALSE;
 
     @ManyToMany
+    @JoinTable(name = "restaurante_usuario_responsavel",
+            joinColumns = @JoinColumn(name = "restaurante_id"),
+            inverseJoinColumns = @JoinColumn(name = "usuario_id"))
+    private Set<Usuario> responsaveis = new HashSet<>();
+
+    @ManyToMany
     @JoinTable(name = "restaurante_forma_pagamento",
             joinColumns = @JoinColumn(name = "restaurante_id"),
             inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
@@ -88,6 +94,14 @@ public class Restaurante implements Serializable {
 
     public void deactive() {
         setAtivo(false);
+    }
+
+    public boolean removeResponsavel(Usuario usuario) {
+        return getResponsaveis().remove(usuario);
+    }
+
+    public boolean addResponsavel(Usuario usuario) {
+        return getResponsaveis().add(usuario);
     }
 
     public boolean removeFormaPagamento(FormaPagamento formaPagamento) {
