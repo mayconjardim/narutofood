@@ -2,6 +2,7 @@ package com.narutofood.api.domain.service;
 
 import com.narutofood.api.domain.exception.NegocioException;
 import com.narutofood.api.domain.exception.UsuarioNaoEncontradoException;
+import com.narutofood.api.domain.model.Grupo;
 import com.narutofood.api.domain.model.Usuario;
 import com.narutofood.api.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ public class CadastroUsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private CadastroGrupoService cadastroGrupo;
 
     @Transactional
     public Usuario save(Usuario usuario) {
@@ -39,6 +43,21 @@ public class CadastroUsuarioService {
         }
 
         usuario.setSenha(novaSenha);
+    }
+
+    public void removeGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = findOrFail(usuarioId);
+        Grupo grupo = cadastroGrupo.findOrFail(grupoId);
+
+        usuario.removeGrupo(grupo);
+    }
+
+    @Transactional
+    public void addGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = findOrFail(usuarioId);
+        Grupo grupo = cadastroGrupo.findOrFail(grupoId);
+
+        usuario.addGrupo(grupo);
     }
 
     public Usuario findOrFail(Long id) {
