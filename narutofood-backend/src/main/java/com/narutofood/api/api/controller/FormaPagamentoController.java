@@ -1,7 +1,7 @@
 package com.narutofood.api.api.controller;
 
 import com.narutofood.api.api.assembler.FormaPagamentoDtoAssembler;
-import com.narutofood.api.api.assembler.FormaPagamentoDtoInputDisassembler;
+import com.narutofood.api.api.assembler.FormaPagamentoInputDisassembler;
 import com.narutofood.api.api.model.dto.FormaPagamentoDTO;
 import com.narutofood.api.api.model.input.FormaPagamentoInput;
 import com.narutofood.api.domain.model.FormaPagamento;
@@ -28,7 +28,7 @@ public class FormaPagamentoController {
     private FormaPagamentoDtoAssembler assembler;
 
     @Autowired
-    private FormaPagamentoDtoInputDisassembler disassembler;
+    private FormaPagamentoInputDisassembler disassembler;
 
     @GetMapping
     public List<FormaPagamentoDTO> findAll() {

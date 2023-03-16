@@ -1,7 +1,7 @@
 package com.narutofood.api.api.controller;
 
 import com.narutofood.api.api.assembler.CidadeDtoAssembler;
-import com.narutofood.api.api.assembler.CidadeDtoInputDisassembler;
+import com.narutofood.api.api.assembler.CidadeInputDisassembler;
 import com.narutofood.api.api.model.dto.CidadeDTO;
 import com.narutofood.api.api.model.input.CidadeInput;
 import com.narutofood.api.domain.exception.*;
@@ -27,7 +27,7 @@ public class CidadeController {
     private CidadeDtoAssembler assembler;
 
     @Autowired
-    private CidadeDtoInputDisassembler disassembler;
+    private CidadeInputDisassembler disassembler;
 
     @Autowired
     private CadastroCidadeService cadastroCidadeService;

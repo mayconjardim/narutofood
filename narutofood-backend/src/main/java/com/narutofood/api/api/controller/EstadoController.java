@@ -1,7 +1,7 @@
 package com.narutofood.api.api.controller;
 
 import com.narutofood.api.api.assembler.EstadoDtoAssembler;
-import com.narutofood.api.api.assembler.EstadoDtoInputDisassembler;
+import com.narutofood.api.api.assembler.EstadoInputDisassembler;
 import com.narutofood.api.api.model.dto.EstadoDTO;
 import com.narutofood.api.api.model.input.EstadoInput;
 import com.narutofood.api.domain.exception.EntidadeEmUsoException;
@@ -28,7 +28,7 @@ public class EstadoController {
     private EstadoDtoAssembler assembler;
 
     @Autowired
-    private EstadoDtoInputDisassembler disassembler;
+    private EstadoInputDisassembler disassembler;
 
     @Autowired
     private CadastroEstadoService cadastroEstadoService;

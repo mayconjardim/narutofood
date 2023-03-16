@@ -1,7 +1,7 @@
 package com.narutofood.api.api.controller;
 
 import com.narutofood.api.api.assembler.CozinhaDtoAssembler;
-import com.narutofood.api.api.assembler.CozinhaDtoInputDisassembler;
+import com.narutofood.api.api.assembler.CozinhaInputDisassembler;
 import com.narutofood.api.api.model.dto.CozinhaDTO;
 import com.narutofood.api.api.model.input.CozinhaInput;
 import com.narutofood.api.domain.model.Cozinha;
@@ -26,7 +26,7 @@ public class CozinhaController {
     private CozinhaDtoAssembler assembler;
 
     @Autowired
-    private CozinhaDtoInputDisassembler disassembler;
+    private CozinhaInputDisassembler disassembler;
 
     @Autowired
     private CadastroCozinhaService cadastroCozinhaService;

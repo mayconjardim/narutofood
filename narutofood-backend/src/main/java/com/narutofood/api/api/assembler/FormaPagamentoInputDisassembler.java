@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FormaPagamentoDtoInputDisassembler {
+public class FormaPagamentoInputDisassembler {
 
     @Autowired
     private ModelMapper modelMapper;

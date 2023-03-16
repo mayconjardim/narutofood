@@ -3,7 +3,7 @@ package com.narutofood.api.api.controller;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.narutofood.api.api.assembler.RestauranteDtoAssembler;
-import com.narutofood.api.api.assembler.RestauranteDtoInputDisassembler;
+import com.narutofood.api.api.assembler.RestauranteInputDisassembler;
 import com.narutofood.api.api.model.dto.RestauranteDTO;
 import com.narutofood.api.api.model.input.RestauranteInput;
 import com.narutofood.api.domain.exception.CidadeNaoEncontradaException;
@@ -13,7 +13,6 @@ import com.narutofood.api.domain.model.Restaurante;
 import com.narutofood.api.domain.repository.RestauranteRepository;
 import com.narutofood.api.domain.service.CadastroRestauranteService;
 import org.flywaydb.core.internal.util.ExceptionUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -41,7 +40,7 @@ public class RestauranteController {
     private RestauranteDtoAssembler assembler;
 
     @Autowired
-    private RestauranteDtoInputDisassembler disassembler;
+    private RestauranteInputDisassembler disassembler;
 
     @GetMapping
     public List<RestauranteDTO> findAll() {
