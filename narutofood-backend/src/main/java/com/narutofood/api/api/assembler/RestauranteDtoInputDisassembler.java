@@ -1,6 +1,7 @@
 package com.narutofood.api.api.assembler;
 
 import com.narutofood.api.api.model.input.RestauranteInput;
+import com.narutofood.api.domain.model.Cidade;
 import com.narutofood.api.domain.model.Cozinha;
 import com.narutofood.api.domain.model.Restaurante;
 import org.modelmapper.ModelMapper;
@@ -19,6 +20,11 @@ public class RestauranteDtoInputDisassembler {
 
     public void copyToDomainObject(RestauranteInput restauranteInput, Restaurante restaurante) {
         restaurante.setCozinha(new Cozinha());
+
+        if (restaurante.getEndereco() != null) {
+            restaurante.getEndereco().setCidade(new Cidade());
+        }
+
         modelMapper.map(restauranteInput, restaurante);
     }
 

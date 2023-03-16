@@ -6,6 +6,7 @@ import com.narutofood.api.api.assembler.RestauranteDtoAssembler;
 import com.narutofood.api.api.assembler.RestauranteDtoInputDisassembler;
 import com.narutofood.api.api.model.dto.RestauranteDTO;
 import com.narutofood.api.api.model.input.RestauranteInput;
+import com.narutofood.api.domain.exception.CidadeNaoEncontradaException;
 import com.narutofood.api.domain.exception.CozinhaNaoEncontradaException;
 import com.narutofood.api.domain.exception.NegocioException;
 import com.narutofood.api.domain.model.Restaurante;
@@ -76,7 +77,7 @@ public class RestauranteController {
             disassembler.copyToDomainObject(restauranteInput, restauranteAtual);
 
             return assembler.copyDtoToEntity(cadastroRestaurante.save(restauranteAtual));
-        } catch (CozinhaNaoEncontradaException e) {
+        } catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
         }
     }

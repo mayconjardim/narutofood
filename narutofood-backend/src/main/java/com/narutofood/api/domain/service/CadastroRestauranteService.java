@@ -1,6 +1,7 @@
 package com.narutofood.api.domain.service;
 
 import com.narutofood.api.domain.exception.RestauranteNaoEncontradoException;
+import com.narutofood.api.domain.model.Cidade;
 import com.narutofood.api.domain.model.Cozinha;
 import com.narutofood.api.domain.model.Restaurante;
 import com.narutofood.api.domain.repository.RestauranteRepository;
@@ -21,13 +22,18 @@ public class CadastroRestauranteService {
     @Autowired
     private CadastroCozinhaService cadastroCozinha;
 
+    @Autowired
+    private CadastroCidadeService cadastroCidade;
+
     @Transactional
     public Restaurante save(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
-
+        long cidadeId = restaurante.getEndereco().getCidade().getId();
         Cozinha cozinha = cadastroCozinha.findOrFail(cozinhaId);
+        Cidade cidade = cadastroCidade.findOrFail(cidadeId);
 
         restaurante.setCozinha(cozinha);
+        restaurante.getEndereco().setCidade(cidade);
 
         return restauranteRepository.save(restaurante);
     }
@@ -41,7 +47,7 @@ public class CadastroRestauranteService {
     @Transactional
     public void deactive(Long id ){
         Restaurante restauranteAtual = findOrFail(id);
-        restauranteAtual.deactive();
+        restauranteAtual.deactive(); 
     }
 
     public Restaurante findOrFail(Long restauranteId) {
