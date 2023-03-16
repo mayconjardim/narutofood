@@ -3,6 +3,7 @@ package com.narutofood.api.domain.service;
 import com.narutofood.api.domain.exception.RestauranteNaoEncontradoException;
 import com.narutofood.api.domain.model.Cidade;
 import com.narutofood.api.domain.model.Cozinha;
+import com.narutofood.api.domain.model.FormaPagamento;
 import com.narutofood.api.domain.model.Restaurante;
 import com.narutofood.api.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class CadastroRestauranteService {
 
     @Autowired
     private CadastroCidadeService cadastroCidade;
+
+    @Autowired
+    private CadastroFormaPagamentoService cadastroFormaPagamento;
 
     @Transactional
     public Restaurante save(Restaurante restaurante) {
@@ -47,8 +51,16 @@ public class CadastroRestauranteService {
     @Transactional
     public void deactive(Long id ){
         Restaurante restauranteAtual = findOrFail(id);
-        restauranteAtual.deactive(); 
+        restauranteAtual.deactive();
     }
+
+    @Transactional
+    public void removeFormaPagamento(Long id, long formaPagamentoId) {
+        Restaurante restaurante = findOrFail(id);
+        FormaPagamento formaPagamento = cadastroFormaPagamento.findOrFail(formaPagamentoId);
+        restaurante.removeFormaPagamento(formaPagamento);
+    }
+
 
     public Restaurante findOrFail(Long restauranteId) {
         return restauranteRepository.findById(restauranteId)

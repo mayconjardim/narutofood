@@ -79,4 +79,8 @@ public class Restaurante implements Serializable {
         setAtivo(false);
     }
 
+    public boolean removeFormaPagamento(FormaPagamento formaPagamento) {
+        return getFormasPagamento().remove(formaPagamento);
+    }
+
 }
