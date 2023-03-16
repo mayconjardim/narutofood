@@ -3,6 +3,7 @@ package com.narutofood.api.domain.service;
 import com.narutofood.api.domain.exception.EntidadeEmUsoException;
 import com.narutofood.api.domain.exception.GrupoNaoEncontradoException;
 import com.narutofood.api.domain.model.Grupo;
+import com.narutofood.api.domain.model.Permissao;
 import com.narutofood.api.domain.repository.GrupoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,6 +19,9 @@ public class CadastroGrupoService {
 
     @Autowired
     private GrupoRepository grupoRepository;
+
+    @Autowired
+    private CadastroPermissaoService cadastroPermissao;
 
     @Transactional
     public Grupo save(Grupo grupo) {
@@ -38,6 +42,24 @@ public class CadastroGrupoService {
                     String.format(MSG_GRUPO_EM_USO, grupoId));
         }
     }
+
+    @Transactional
+    public void removePermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = findOrFail(grupoId);
+        Permissao permissao = cadastroPermissao.findOrFail(permissaoId);
+
+        grupo.removePermissao(permissao);
+    }
+
+    @Transactional
+    public void addPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = findOrFail(grupoId);
+        Permissao permissao = cadastroPermissao.findOrFail(permissaoId);
+
+        grupo.addPermissao(permissao);
+    }
+
+
 
     public Grupo findOrFail(Long grupoId) {
         return grupoRepository.findById(grupoId)
