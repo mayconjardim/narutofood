@@ -1,7 +1,9 @@
 package com.narutofood.api.controller;
 
 import com.narutofood.api.assembler.PedidoDTOAssembler;
+import com.narutofood.api.assembler.PedidoResumoDTOAssembler;
 import com.narutofood.api.model.dto.PedidoDTO;
+import com.narutofood.api.model.dto.PedidoResumoDTO;
 import com.narutofood.domain.model.Pedido;
 import com.narutofood.domain.repository.PedidoRepository;
 import com.narutofood.domain.service.EmissaoPedidoService;
@@ -26,11 +28,14 @@ public class PedidoController {
     @Autowired
     private PedidoDTOAssembler assembler;
 
+    @Autowired
+    private PedidoResumoDTOAssembler resumoAssembler;
+
     @GetMapping
-    public List<PedidoDTO> listar() {
+    public List<PedidoResumoDTO> listar() {
         List<Pedido> todosPedidos = pedidoRepository.findAll();
 
-        return assembler.toCollectionModel(todosPedidos);
+        return resumoAssembler.toCollectionModel(todosPedidos);
     }
 
     @GetMapping("/{pedidoId}")
