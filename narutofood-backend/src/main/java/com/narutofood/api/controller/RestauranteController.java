@@ -1,11 +1,13 @@
 package com.narutofood.api.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.narutofood.api.assembler.RestauranteDtoAssembler;
 import com.narutofood.api.assembler.RestauranteInputDisassembler;
 import com.narutofood.api.model.dto.RestauranteDTO;
 import com.narutofood.api.model.input.RestauranteInput;
+import com.narutofood.api.model.view.RestauranteView;
 import com.narutofood.domain.exception.CidadeNaoEncontradaException;
 import com.narutofood.domain.exception.CozinhaNaoEncontradaException;
 import com.narutofood.domain.exception.NegocioException;
@@ -17,6 +19,7 @@ import org.flywaydb.core.internal.util.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -44,9 +47,20 @@ public class RestauranteController {
     private RestauranteInputDisassembler disassembler;
 
     @GetMapping
-    public List<RestauranteDTO> findAll() {
-        return assembler.toCollectionDTO(restauranteRepository.findAll());
+    public MappingJacksonValue findAll(@RequestParam(required = false) String projecao) {
+        List<Restaurante> restaurantes = restauranteRepository.findAll();
+        List<RestauranteDTO> restaurantesDto = assembler.toCollectionDTO(restaurantes);
+
+        MappingJacksonValue restaurantesWrapper = new MappingJacksonValue(restaurantesDto);
+
+        if ("resumo".equals(projecao)) {
+            restaurantesWrapper.setSerializationView (RestauranteView.Resumo.class);
+        }
+
+        return restaurantesWrapper;
     }
+
+
 
     @GetMapping("/{restauranteId}")
     public RestauranteDTO findById(@PathVariable Long restauranteId) {

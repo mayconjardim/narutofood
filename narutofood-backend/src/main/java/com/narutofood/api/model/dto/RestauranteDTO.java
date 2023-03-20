@@ -1,5 +1,7 @@
 package com.narutofood.api.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.narutofood.api.model.view.RestauranteView;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,12 +11,16 @@ import java.math.BigDecimal;
 @Setter
 public class RestauranteDTO {
 
+    @JsonView(RestauranteView.Resumo.class)
     private Long  id;
 
+    @JsonView(RestauranteView.Resumo.class)
     private String nome;
 
+    @JsonView(RestauranteView.Resumo.class)
     private BigDecimal taxaFrete;
 
+    @JsonView(RestauranteView.Resumo.class)
     private CozinhaDTO cozinha;
 
     private Boolean ativo;
