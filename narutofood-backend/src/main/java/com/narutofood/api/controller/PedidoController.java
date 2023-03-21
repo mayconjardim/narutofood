@@ -57,7 +57,7 @@ public class PedidoController {
         try {
             Pedido novoPedido = disassembler.toDomainObject(pedidoInput);
 
-            // TODO pegar usuário autenticado
+            // TOD  O pegar usuário autenticado
             novoPedido.setCliente(new Usuario());
             novoPedido.getCliente().setId(1L);
 

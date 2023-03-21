@@ -1,11 +1,13 @@
 package com.narutofood.api.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
+
 
 @Setter
 @Getter

@@ -39,7 +39,7 @@ public class RestauranteProdutoController {
     public List<ProdutoDTO> findAll(@PathVariable Long id) {
         Restaurante restaurante = cadastroRestaurante.findOrFail(id);
 
-        List<Produto> todosProdutos = produtoRepository.findByRestaurante(restaurante);
+        List<Produto> todosProdutos = produtoRepository.findAtivosByRestaurante(restaurante);
 
         return assembler.toCollectionModel(todosProdutos);
     }
